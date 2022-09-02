@@ -12,6 +12,9 @@ case it is needed.
 There are two modules currently - one for the container registry and another one for the
 app and accompanying resources (a service plan, application insights and a storage account)
 # Quickstart
+
+## Infra
+
 1. Set up an azure active directory and a subscription and use [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/) to authenticate.
 
 2. Run
@@ -20,17 +23,38 @@ app and accompanying resources (a service plan, application insights and a stora
     ```
     to initialize the configuration
 
-3. Change the variables in `main.tf` (alternatively also those in the modules)
+3. Change the variables in `main.tf` (alternatively also those in the modules). You might be required to change certain names which need to be globally unique. it is easiest to do with changing the prefix variables in `variables.tf` of each module.
 
 4. ``terraform apply`` to create the infrastructure
 5. Deploy a container to the ACR registry with docker.
 6. Profit! (or ``terraform destroy`` the infrastructure)
 
+## Model Deployment
+
+Note: The names of resources, models and containers etc. can vary based on how you change the terraform variables and how you name your models. This is just an illustrative example.
+
+1. You should have a model (`iris`) at hand and use MLEM, BentoML or other tools to build it into a container with a FastAPI server (other serving options might also work, but I haven't tested it).
+2. Login to your container registry (the name can vary based on how you change the terraform variables)
+    ``az acr login --name mypreciouscontainers``
+3. Tag your local docker image with an alias with a full path to the registry, e.g.
+    ```
+    docker tag iris_classifier mypreciouscontainers.azurecr.io/iris
+    ```
+3. push the image to the registry with
+    ```
+    docker push mypreciouscontainers.azurecr.io/iris:latest
+    ```
+4. That's it, the service should be accessible at 
+    ```
+    https://myprecious-skynet-service-test.azurewebsites.net
+    ```
+    
 
 # TODO
-- [] Centralize variables in `terraform.tfvars` and add more configuration options to avoid having to rewrite the scripts themselves (at least as long as the usecase is not too far off)
-- [] Move storage account to a separate module (and make it optional?)
-- [] Container deployment (currently has to be done manually)
+- [ ] Centralize variables in `terraform.tfvars` and add more configuration options to avoid having to rewrite the scripts themselves (at least as long as the usecase is not too far off)
+- [ ] Move storage account to a separate module (and make it optional?)
+- [ ] Add some example models and recipes for building them into containers
+- [ ] After that, also add examples of container deployment with CICD (currently has to be done manually)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
