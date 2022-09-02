@@ -33,7 +33,7 @@ app and accompanying resources (a service plan, application insights and a stora
 
 Note: The names of resources, models and containers etc. can vary based on how you change the terraform variables and how you name your models. This is just an illustrative example.
 
-1. You should have a model (`iris`) at hand and use MLEM, BentoML or other tools to build it into a container with a FastAPI server (other serving options might also work, but I haven't tested it).
+1. You should have a model (`iris_classifier`) at hand and use MLEM, BentoML or other tools to build it into a container with a FastAPI server (other serving options might also work, but I haven't tested it).
 2. Login to your container registry (the name can vary based on how you change the terraform variables)
     ``az acr login --name mypreciouscontainers``
 3. Tag your local docker image with an alias with a full path to the registry, e.g.
